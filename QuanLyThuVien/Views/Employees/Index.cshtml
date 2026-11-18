@@ -1,0 +1,90 @@
+@model IEnumerable<QuanLyThuVien.Models.Employee>
+
+@{
+    ViewData["Title"] = "Quản lý nhân viên - Lab 5";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="text-primary mb-0"><i class="bi bi-people"></i> Quản Lý Nhân Viên Thư Viện (Bài 1)</h2>
+            <p class="text-muted small mb-0">CRUD Hồ sơ Nhân sự (EF Core Code First) — Phân quyền: <code>ManagerOnly</code></p>
+        </div>
+        <a asp-action="Create" class="btn btn-success shadow-sm">
+            <i class="bi bi-person-plus"></i> Thêm Nhân Viên
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Mã NV</th>
+                            <th>Họ và tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th class="text-center">Vai trò</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th style="width: 210px;" class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><strong>#@item.Id</strong></td>
+                                <td><code>@item.EmployeeCode</code></td>
+                                <td class="fw-bold">@item.FullName</td>
+                                <td>@item.Email</td>
+                                <td>@(item.Phone ?? "N/A")</td>
+                                <td class="text-center">
+                                    @if (item.Role == "Admin" || item.Role == "Manager")
+                                    {
+                                        <span class="badge bg-danger">Quản lý (@item.Role)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info text-dark">Thủ thư (@item.Role)</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (item.Active)
+                                    {
+                                        <span class="badge bg-success">Hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Đã khóa</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Chi tiết</a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Sửa</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Xóa</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

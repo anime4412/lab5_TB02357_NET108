@@ -1,0 +1,42 @@
+@model QuanLyThuVien.Models.Employee
+
+@{
+    ViewData["Title"] = "Xác nhận xóa nhân viên - Lab 5";
+}
+
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-6">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white py-3">
+                <h5 class="mb-0 fw-bold"><i class="bi bi-trash"></i> Xác Nhận Xóa Nhân Viên</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-warning">
+                    Bạn có chắc chắn muốn xóa tài khoản nhân viên này không?
+                </div>
+
+                <dl class="row mb-4">
+                    <dt class="col-sm-4 text-muted">Mã NV:</dt>
+                    <dd class="col-sm-8"><code>@Model.EmployeeCode</code></dd>
+
+                    <dt class="col-sm-4 text-muted">Họ và tên:</dt>
+                    <dd class="col-sm-8 fw-bold text-primary">@Model.FullName</dd>
+
+                    <dt class="col-sm-4 text-muted">Email:</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4 text-muted">Vai trò:</dt>
+                    <dd class="col-sm-8">@Model.Role</dd>
+                </dl>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Hủy bỏ</a>
+                        <button type="submit" class="btn btn-danger fw-bold px-4">Đồng Ý Xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

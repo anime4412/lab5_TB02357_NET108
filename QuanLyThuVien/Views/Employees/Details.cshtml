@@ -1,0 +1,44 @@
+@model QuanLyThuVien.Models.Employee
+
+@{
+    ViewData["Title"] = "Chi tiết nhân viên - Lab 5";
+}
+
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-6">
+        <div class="card shadow border-0">
+            <div class="card-header bg-info text-white py-3">
+                <h5 class="mb-0 fw-bold"><i class="bi bi-person-vcard"></i> Chi Tiết Nhân Viên</h5>
+            </div>
+            <div class="card-body p-4">
+                <dl class="row">
+                    <dt class="col-sm-4 text-muted">ID:</dt>
+                    <dd class="col-sm-8 fw-bold">#@Model.Id</dd>
+
+                    <dt class="col-sm-4 text-muted">Mã nhân viên:</dt>
+                    <dd class="col-sm-8"><code>@Model.EmployeeCode</code></dd>
+
+                    <dt class="col-sm-4 text-muted">Họ và tên:</dt>
+                    <dd class="col-sm-8 fw-bold text-primary">@Model.FullName</dd>
+
+                    <dt class="col-sm-4 text-muted">Email:</dt>
+                    <dd class="col-sm-8">@Model.Email</dd>
+
+                    <dt class="col-sm-4 text-muted">Số điện thoại:</dt>
+                    <dd class="col-sm-8">@(Model.Phone ?? "N/A")</dd>
+
+                    <dt class="col-sm-4 text-muted">Vai trò:</dt>
+                    <dd class="col-sm-8"><span class="badge bg-dark">@Model.Role</span></dd>
+
+                    <dt class="col-sm-4 text-muted">Trạng thái:</dt>
+                    <dd class="col-sm-8">@(Model.Active ? "Đang hoạt động" : "Đã khóa")</dd>
+                </dl>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-action="Index" class="btn btn-outline-secondary">Quay lại</a>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Chỉnh sửa</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

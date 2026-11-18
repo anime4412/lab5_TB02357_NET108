@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Trang chủ - Hệ thống Thư viện Điện tử (Lab 5)";
+}
+
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm border">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold text-primary">📚 Hệ Thống Quản Lý Thư Viện Điện Tử</h1>
+        <p class="col-md-10 fs-5 text-muted">
+            Bài thực hành <strong>LAB 5</strong> (EF Core 8.0 Code First): Hoàn thiện CRUD <strong>Sách</strong> &amp; <strong>Nhân viên</strong>, tính năng <strong>Cấp lại mật khẩu ngẫu nhiên qua Email</strong> và nâng cấp <strong>Lọc theo Thể loại + Tìm kiếm Sách</strong>.
+        </p>
+        <div class="mb-4">
+            <span class="badge bg-secondary p-2 me-1">Môn học: NET108 / SOF1022</span>
+            <span class="badge bg-info text-dark p-2 me-1">Sinh viên: TB02357</span>
+            <span class="badge bg-dark p-2">Nhóm thực hiện: Nhóm 5</span>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Books" asp-action="Index" class="btn btn-primary btn-lg shadow-sm">
+                    <i class="bi bi-book"></i> Quản Lý Sách (Tìm Kiếm &amp; Lọc)
+                </a>
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                    <a asp-controller="Employees" asp-action="Index" class="btn btn-info text-dark btn-lg shadow-sm">
+                        <i class="bi bi-people"></i> Quản Lý Nhân Viên
+                    </a>
+                }
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg shadow-sm">
+                    <i class="bi bi-box-arrow-in-right"></i> Đăng Nhập Hệ Thống
+                </a>
+                <a asp-controller="Account" asp-action="ForgotPassword" class="btn btn-outline-secondary btn-lg">
+                    <i class="bi bi-key"></i> Quên Mật Khẩu?
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title text-primary"><i class="bi bi-journals"></i> Bài 1: CRUD Sách &amp; Nhân Viên</h5>
+                <p class="card-text text-muted">
+                    Quản lý đầy đủ Sách (<code>BooksController</code>) kèm upload ảnh bìa qua <code>FileUtil</code> và quản lý hồ sơ Nhân sự (<code>EmployeesController</code>) trên nền <code>LibraryDbContext</code> Code First.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title text-success"><i class="bi bi-envelope-check"></i> Bài 2: Cấp Lại Mật Khẩu</h5>
+                <p class="card-text text-muted">
+                    Khi nhân viên chọn Quên mật khẩu, hệ thống sinh mật khẩu mới ngẫu nhiên bằng <code>RandomNumberGenerator</code>, lưu xuống SQL Server và gửi về Email qua <code>EmailService</code>.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title text-warning"><i class="bi bi-funnel"></i> Bài 3: Lọc &amp; Tìm Kiếm Sách</h5>
+                <p class="card-text text-muted">
+                    Nâng cấp <code>Books/Index</code> hỗ trợ lọc sách theo Thể loại (<code>categoryId</code>) kết hợp tìm kiếm theo Tên sách, ISBN, Tác giả qua truy vấn LINQ EF Core.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

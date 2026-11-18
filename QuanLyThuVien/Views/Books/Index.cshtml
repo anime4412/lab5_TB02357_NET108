@@ -1,0 +1,139 @@
+@model IEnumerable<QuanLyThuVien.Models.Book>
+
+@{
+    ViewData["Title"] = "Quản lý sách thư viện - Lab 5";
+    bool isManager = User.IsInRole("Admin") || User.IsInRole("Manager");
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="text-primary mb-0"><i class="bi bi-book"></i> Quản Lý Sách Thư Viện (Bài 1 &amp; Bài 3)</h2>
+            <p class="text-muted small mb-0">CRUD Sách (EF Core Code First) — Hỗ trợ <strong>Lọc theo Thể loại</strong> &amp; <strong>Tìm kiếm theo Tên / ISBN / Tác giả</strong></p>
+        </div>
+        @if (isManager)
+        {
+            <a asp-action="Create" class="btn btn-success shadow-sm">
+                <i class="bi bi-plus-circle"></i> Thêm Sách Mới
+            </a>
+        }
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- BÀI 3: FORM LỌC THEO THỂ LOẠI VÀ TÌM KIẾM THEO TÊN SÁCH -->
+    <div class="card shadow-sm border-0 mb-3 bg-light">
+        <div class="card-body py-3">
+            <form asp-action="Index" method="get" class="row g-2 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold small text-muted mb-1">Lọc theo Thể loại:</label>
+                    <select name="categoryId" asp-items="ViewBag.Categories" class="form-select">
+                        <option value="">-- Tất cả thể loại --</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label fw-bold small text-muted mb-1">Tìm kiếm theo Tên sách / ISBN / Tác giả:</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" name="searchString" value="@ViewBag.CurrentSearch" class="form-control" placeholder="Nhập tên sách, mã ISBN hoặc tác giả..." />
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1 fw-bold">
+                        <i class="bi bi-funnel"></i> Lọc &amp; Tìm
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Đặt lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th style="width: 85px;">Ảnh bìa</th>
+                            <th style="width: 130px;">ISBN</th>
+                            <th>Tên sách</th>
+                            <th>Thể loại</th>
+                            <th>Tác giả</th>
+                            <th class="text-end">Giá bìa</th>
+                            <th class="text-center">Kho</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th style="width: 210px;" class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><strong>#@item.Id</strong></td>
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(item.CoverImage))
+                                        {
+                                            <img src="@item.CoverImage" alt="@item.Title" class="img-thumbnail" style="max-height:60px;" />
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-light text-muted border">No image</span>
+                                        }
+                                    </td>
+                                    <td><code>@item.ISBN</code></td>
+                                    <td class="fw-bold text-dark">@item.Title</td>
+                                    <td><span class="badge bg-info text-dark">@(item.CategoryName ?? "Chưa phân loại")</span></td>
+                                    <td>@(item.Author ?? "N/A")</td>
+                                    <td class="text-end text-danger fw-bold">@item.Price.ToString("N0") đ</td>
+                                    <td class="text-center"><span class="badge bg-secondary">@item.AvailableQuantity / @item.Quantity</span></td>
+                                    <td class="text-center">
+                                        @if (item.Active)
+                                        {
+                                            <span class="badge bg-success">Có</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Ngưng</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Chi tiết</a>
+                                        @if (isManager)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Sửa</a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Xóa</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center py-4 text-muted">
+                                    Không tìm thấy cuốn sách nào phù hợp với điều kiện lọc/tìm kiếm.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

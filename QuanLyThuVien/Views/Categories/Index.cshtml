@@ -1,0 +1,78 @@
+@model IEnumerable<QuanLyThuVien.Models.Category>
+
+@{
+    ViewData["Title"] = "Quản lý thể loại sách - Lab 5";
+    bool isManager = User.IsInRole("Admin") || User.IsInRole("Manager");
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="text-primary mb-0"><i class="bi bi-tags"></i> Quản Lý Danh Mục Thể Loại Sách</h2>
+        </div>
+        @if (isManager)
+        {
+            <a asp-action="Create" class="btn btn-success shadow-sm">
+                <i class="bi bi-plus-circle"></i> Thêm Thể Loại Mới
+            </a>
+        }
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Hình ảnh</th>
+                            <th>Tên thể loại</th>
+                            <th>Mô tả</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><strong>#@item.Id</strong></td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Image))
+                                    {
+                                        <img src="@item.Image" alt="@item.Name" class="rounded" style="width: 50px; height: 50px; object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-light text-muted border">No image</span>
+                                    }
+                                </td>
+                                <td class="fw-bold">@item.Name</td>
+                                <td class="text-muted">@item.Description</td>
+                                <td class="text-center">
+                                    <span class="badge @(item.Active ? "bg-success" : "bg-secondary")">@(item.Active ? "Đang dùng" : "Tạm ngưng")</span>
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Chi tiết</a>
+                                    @if (isManager)
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Sửa</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Xóa</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
